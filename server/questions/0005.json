@@ -1,0 +1,12 @@
+{
+    "title": "Meeting Rooms II",
+    "content": "Given an array of meeting time intervals intervals where intervals[i] = [starti, endi], return the minimum number of conference rooms required.",
+    "inputoutputs": [
+        {"stdin": "[[0,30],[5,10],[15,20]]", "stdout": "2"},
+        {"stdin": "[[7,10],[2,4]]", "stdout": "1"}
+    ],
+    "difficultylevel":"Medium",
+    "tags": [
+        {"topic": "Array", "subtopic": "Intervals"}
+    ]
+}

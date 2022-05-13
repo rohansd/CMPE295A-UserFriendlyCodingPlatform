@@ -1,0 +1,12 @@
+{
+    "title": "Meeting Rooms",
+    "content": "Given an array of meeting time intervals where intervals[i] = [starti, endi], determine if a person could attend all meetings.",
+    "inputoutputs": [
+        {"stdin": "[[0,30],[5,10],[15,20]]", "stdout": false},
+        {"stdin": "[[7,10],[2,4]]", "stdout": true}
+    ],
+    "difficultylevel":"Easy",
+    "tags": [
+        {"topic": "Array", "subtopic": "Intervals"}
+    ]
+}

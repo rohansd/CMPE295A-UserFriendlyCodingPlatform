@@ -1,0 +1,13 @@
+{
+    "title": "Find the Rotation Count in Rotated Sorted array.",
+    "content": "Consider an array arr of distinct numbers sorted in increasing order. Given that this array has been rotated (clockwise) k number of times. Given such an array, find the value of k.",
+    "inputoutputs": [
+        {"stdin": "[15, 18, 2, 3, 6, 12]", "stdout": "2"},
+        {"stdin": "[7, 9, 11, 12, 5]", "stdout": "4"},
+        {"stdin": "[7, 9, 11, 12, 15]", "stdout": "0"}
+    ],
+    "difficultylevel":"Easy",
+    "tags": [
+        {"topic": "Array", "subtopic": "Array Rotations"}
+    ]
+}
