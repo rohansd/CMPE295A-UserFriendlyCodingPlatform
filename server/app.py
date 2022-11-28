@@ -189,12 +189,8 @@ def login():
 def register():
     msg = ""
     request_data = request.get_json()
-    print("request123", request)
-    print("json", request_data)
-    print("HELLO1213")
     if request.method == "POST":
         print(request.method)
-        print("HELLO")
         if 'username' in request_data and 'password' in request_data and 'email' in request_data :
             print(request_data)
             username = request_data['username']
