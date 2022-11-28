@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
+import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -12,36 +13,44 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Redirect } from "react-router";
+import { useHistory } from "react-router-dom";
 import {signin} from '../services/authenticationService';
-
 
 const theme = createTheme();
 
 export default function SignInSide() {
+  let history = useHistory();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    var user = data.get('user');
-    var admin = data.get('admin');
-    var persona;
-    if (user === 'on') persona = "user";
-    if (admin === 'on') persona = "admin";
-    // eslint-disable-next-line no-console
     console.log("logging in credentials :");
     console.log({
-      email: data.get('email'),
+      username: data.get('username'),
       password: data.get('password'),
-      persona: persona
     });
 
-    const response = await signin({
-      email: data.get('email'),
+    var data1= {
+      username: data.get('username'),
       password: data.get('password'),
-      persona: persona,
-    })
-    console.log("login response", response);
-    console.log(response.status);
+    }
+
+    const res = await axios
+      .post("http://localhost:5000/login", data1)
+      .then((response) => {
+        console.log("Status Code : ", response.status);
+        console.log("returned message :", response.data);
+        if (response.status === 200 && response.data === "Valid Login") {
+          console.log("logged in username :", data1.username);
+          history.push("/problems");
+        }
+        else {
+          console.log("INVALID CREDENTIALS");
+          setErrorMessage('Invalid Credentials. Please Try Again');
+        }
+      });
   }
 
   return (
@@ -75,36 +84,25 @@ export default function SignInSide() {
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
+
+            {errorMessage && (
+  <p className="error"> {errorMessage} </p>
+)}
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
 
             <br></br>
-            <Grid item xs={12}>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="user" id="user"/>
-                    <label class="form-check-label" for="user">
-                    User
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="admin" id="admin"/>
-                    <label class="form-check-label" for="admin">
-                    Admin
-                    </label>
-                  </div>
-              </Grid>
-              <br></br>
-
+          
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="Username"
                 autoFocus
               />
               <TextField
@@ -117,10 +115,7 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+          
               <Button
                 type="submit"
                 fullWidth

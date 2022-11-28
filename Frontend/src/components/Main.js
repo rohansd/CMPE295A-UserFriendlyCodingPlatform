@@ -6,6 +6,9 @@ import NavBar from './NavBar';
 import Logout from './logout';
 import CodeScreen from './codescreen';
 import ButtonBases from './buttonBase';
+import DemoCompiler from './demoCompiler';
+import Problems from './problems';
+import Try from './try';
 //Create a Main Component
 class Main extends Component {
         state = {
@@ -30,6 +33,15 @@ class Main extends Component {
                     </Route>
                     <Route path="/codescreen">
                         <CodeScreen></CodeScreen>
+                    </Route>
+                    <Route path="/democompiler">
+                        <DemoCompiler></DemoCompiler>
+                    </Route>
+                    <Route path="/problems">
+                        <Problems></Problems>
+                    </Route>
+                    <Route path="/try">
+                        <Try></Try>
                     </Route>
                 </Router>
 

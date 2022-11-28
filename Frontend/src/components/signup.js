@@ -15,13 +15,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Redirect } from "react-router";
+import { useHistory } from "react-router-dom";
 import {signup} from '../services/authenticationService';
-
 
 const theme = createTheme();
 
 export default function Signup() {
-
+  let history = useHistory();
+  const [errorMessage, setErrorMessage] = useState('');
   const [idCreated, setidCreated] = useState(0);
 
   // const {setUser, setAuthState, updateLocalStorage} = authContext;
@@ -29,24 +30,52 @@ export default function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    var user = data.get('user');
-    var admin = data.get('admin');
-    var persona;
-    if (user === 'on') persona = "user";
-    if (admin === 'on') persona = "admin";
+    // var user = data.get('user');
+    // var admin = data.get('admin');
+    // var persona;
+    // if (user === 'on') persona = "user";
+    // if (admin === 'on') persona = "admin";
     // eslint-disable-next-line no-console
     var data1= {
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
-      persona:persona,
     };
-
-
-    const response = await signup(data1);
-    console.log(response.data);
-    console.log(response.status);
+    console.log(data1.username);
+    const res = await axios
+      .post("http://localhost:5000/register", data1
+      //   , {
+      //   headers: {
+      //     'content-type': 'application/json',
+      //     'Access-Control-Allow-Origin': '*'
+      //   }
+      // }
+    )
+      .then((response) => {
+        console.log("Status Code : ", response.status);
+        console.log("returned message :", response.data);
+        if (response.status === 200 && response.data === "You have successfully registered !") {
+          // localStorage.setItem("c_id", response.data.CustomerID);
+          // localStorage.setItem('customerEmail', this.state.email);
+          // localStorage.setItem('username', this.state.persona);
+          // this.setState({
+          //   authFlag: true,
+          //   idCreated: (
+          //     <Redirect to="/problems"></Redirect>
+          //   ),
+          // })
+          console.log("signed up", data1.username);
+          history.push("/problems");
+        }
+        else {
+          console.log("INVALID CREDENTIALS");
+          setErrorMessage('Invalid Credentials. Please Try Again');
+        }
+      });
+              
+    // const response = await signup(data1);
+    // console.log(response.data);
+    // console.log(response.status);
     // if(response.status === 200){
     //   setUser(response.data);
     //   setAuthState(true);
@@ -58,13 +87,13 @@ export default function Signup() {
     // }
   };
 
-  if(idCreated){
-    return <Redirect to="/profile" />
-  } else  if (idCreated==="Email ID already exists"){
-    return (
-    <div> Email ID already exists </div>
-  );
-  }
+  // if(idCreated){
+  //   return <Redirect to="/profile" />
+  // } else  if (idCreated==="Email ID already exists"){
+  //   return (
+  //   <div> Email ID already exists </div>
+  // );
+  // }
   return (
     
     <ThemeProvider theme={theme}>
@@ -102,7 +131,7 @@ export default function Signup() {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <br></br>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="user" id="user"/>
                     <label class="form-check-label" for="user">
@@ -116,21 +145,21 @@ export default function Signup() {
                     Admin
                     </label>
                   </div>
-              </Grid>
+              </Grid> */}
               <br></br>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  autoComplete="Username"
+                  name="username"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="username"
+                  label="Username"
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -139,7 +168,7 @@ export default function Signup() {
                   name="lastName"
                   autoComplete="family-name"
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required

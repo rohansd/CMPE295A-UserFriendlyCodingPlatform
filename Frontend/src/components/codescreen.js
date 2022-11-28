@@ -1,4 +1,5 @@
-import React, {useContext} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
+import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,56 +17,55 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme();
 
 export default function CodeScreen() {
-    const [value, setValue] = React.useState('Controlled');
+    // const [value, setValue] = React.useState('Controlled');
 
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
+    // const handleChange = (event) => {
+    //     setValue(event.target.value);
+    // };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        var user = data.get('user');
-        var admin = data.get('admin');
-        var persona;
-        if (user === 'on') persona = "user";
-        if (admin === 'on') persona = "admin";
-        // eslint-disable-next-line no-console
-        console.log("logging in credentials :");
-        console.log({
-          email: data.get('email'),
-          password: data.get('password'),
-          persona: persona
-        });
-    
-        // const response = await signin({
-        //   email: data.get('email'),
-        //   password: data.get('password'),
-        //   persona: persona,
-        // })
-        // console.log("login response", response);
-        // console.log(response.status);
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();
+    //     const data = new FormData(event.currentTarget);
+    //     var user = data.get('user');
+    //     var admin = data.get('admin');
+    //     var persona;
+    //     if (user === 'on') persona = "user";
+    //     if (admin === 'on') persona = "admin";
+    //     // eslint-disable-next-line no-console
+    //     console.log("logging in credentials :");
+    //     console.log({
+    //       email: data.get('email'),
+    //       password: data.get('password'),
+    //       persona: persona
+    //     });
+      
+  const [loading, setLoading] = useState(true);
+  const [question, setQuestion] = useState([])
+
+  var data1 = {
+    "title" : localStorage.getItem('questionTitle')
+  }
+
+  useEffect(() => {
+    const fetchData = async () =>{
+      setLoading(true);
+      try {
+        const response = await axios.post('http://localhost:5000/get_problem_by_title', data1);
+        console.log("********** question :", response.data);
+        setQuestion(response.data) 
+      } catch (error) {
+        console.error("***********",error.message);
+      }
+      setLoading(false);
     }
+
+    fetchData();
+  }, []);
     
     return (
         <ThemeProvider theme={theme}>
             <Grid container component="main" >
             <CssBaseline />
-            {/* <Grid
-              item
-              xs={false}
-              sm={4}
-              md={7}
-              sx={{
-                
-                backgroundColor: (t) =>
-                  t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-                />
-                hi
-            </Grid> */}
             <Grid
             item
             sx={{
@@ -83,12 +83,14 @@ export default function CodeScreen() {
                 noValidate
                 autoComplete="off"
                 >
-                <div>
-                    <TextField
+              <div>
+                <Box component="span" sx={{ display: 'block' }}>{question.Id}.  {question.Title}</Box>
+
+                <TextField
                     id="standard-multiline-static"
                     label="Question"
                     multiline
-                    rows={25}
+                  // rows={25}
                     defaultValue="
                     Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.
 
@@ -112,22 +114,29 @@ export default function CodeScreen() {
                     inputProps={
                         { readOnly: true, }
                     }
-                    >
-                    
-                    </TextField>
+                >
+                </TextField>
+                <Box component="span" sx={{ display: 'block' }}>Acceptance rate : {question.Acceptance}</Box>
+                <Box component="span" sx={{ display: 'block' }}>Difficulty level : {question.Difficulty}</Box>
+                <Box component="span" sx={{ display: 'block' }}>Frequency : {question.Frequency}</Box>
                 </div>
                 </Box>
             </Grid>
             <Grid>        
                 <Box
-                component="form"
-                sx={{
-                    '& .MuiTextField-root': { m: 1, width: '95ch' },
-                }}
-                noValidate
-                autoComplete="off"
-                >
-                <div>
+              component="iframe"
+              // sx={{
+              //     '& .MuiTextField-root': { m: 1, width: '95ch' },
+              // }}
+              src='https://trinket.io/embed/python/3d8d7ce66b?toggleCode=true&showInstructions=true'
+              sx={{
+                width: 850,
+                height: 600
+              }}
+              allowfullscreen
+            >
+              {/* <iframe src="https://trinket.io/embed/python/3d8d7ce66b" width="100%" height="356" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe> */}
+                {/* <div>
                     <TextField
                     id="standard-multiline-static"
                     label="Input Code"
@@ -162,7 +171,7 @@ export default function CodeScreen() {
                         backgroundPosition: 'center',
                       }}
                     />
-                </div>
+                </div> */}
                 </Box>
             </Grid>
             </Grid>

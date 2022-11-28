@@ -11,9 +11,13 @@ class App extends React.Component {
   }
 
   callAPI() {
-    fetch('http://localhost:5000')
+    // fetch('http://localhost:5000')
+    fetch('http://127.0.0.1:5000')
       .then(res => res.text())
-      .then(res => this.setState({ apiResponse: res }));
+      .then(res => this.setState({ apiResponse: res }))
+      .catch(err => {
+        console.log("server api in App.js error", err)
+      });
   }
 
   componentWillMount() {
