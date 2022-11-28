@@ -19,13 +19,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 import random
 #Threshold setting
-threshold_1 = 3
-threshold_2 = 5
+threshold_1 = 20
+threshold_2 = 60
 
 # Preprocessed data
 frame = pd.read_csv("./data/problem.csv")
 content = pd.read_csv("./data/content.csv")
 frame = frame.merge(content, how="left", on="Title")
+frame_req = frame[["Id","Title","Difficulty","problem", "Frequency"]]
 
 # Model Training for Array
 frame_array = frame.loc[frame['Array']==1].reset_index(drop=True)
@@ -82,15 +83,7 @@ def recommend_problem(ds, uid, score):
 @app.route('/')         
 @app.route('/get_problems', methods=['GET', 'POST'])
 def get_problems():
-    sql = 'Select * from Problems'
-    # with connection.cursor() as cursor: 
-    connection.ping()        
-    cursor.execute(sql)
-    # cursor.execute(sql)
-    result = cursor.fetchall()
-    print("problem list :")
-    print(result)
-    return jsonify(result)
+    return frame_req.to_dict('records')
 
 
 @app.route('/get_problem_by_title', methods=['GET', 'POST'])
@@ -253,6 +246,30 @@ def decrement_user_score():
         cursor.execute("UPDATE user_score set score= % s  where userId= % s and ds=% s",(user_score, uid, ds))
         connection.commit()
     return "Decrement Success"
+
+@app.route('/get_feedback', methods=['GET', 'POST'])
+def get_user_feedback():
+    request_data = request.get_json()
+    uid = request_data["userId"]
+    qtitle = request_data["Title"]
+    ds = request_data["dataStructure"]
+    temp_df = df_name[ds]
+    q_difficulty = temp_df[temp_df["Title"]==qtitle]["Difficulty"].iloc[0]
+    q_acceptance = temp_df[temp_df["Title"]==qtitle]["Acceptance"].iloc[0]
+    q_frequency = temp_df[temp_df["Title"]==qtitle]["Frequency"].iloc[0]
+    cursor.execute("SELECT * FROM user_score WHERE userId = % s AND ds = % s",(uid, ds))
+    userScore = cursor.fetchone()
+    if(userScore):
+        user_score = userScore["score"]
+    else:
+        user_score = 0
+    op = {
+        "Frequency" : q_frequency,
+        "Acceptance" : str(q_acceptance)+"%",
+        "Difficulty" : q_difficulty,
+        "User Score": user_score
+    }
+    return op
 
 if __name__ == '__main__':
     app.run(debug=True)
