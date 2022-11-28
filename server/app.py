@@ -34,7 +34,7 @@ column_trans = ColumnTransformer(
                                  ['Difficulty']),
                 ('tfidf', TfidfVectorizer(), 'problem')],
                 remainder='drop', verbose_feature_names_out=False)
-frame_arr = frame_array[["Id","Title","Difficulty","problem"]]
+frame_arr = frame_array[["Id","Title","Difficulty","problem", "Frequency"]]
 column_trans.fit(frame_arr)
 column_trans.get_feature_names_out()
 X = column_trans.transform(frame_arr).toarray()
@@ -44,7 +44,6 @@ labels=model_array.labels_
 frame_array["cluster"] = labels 
 #print(frame_array)
 
-model_name = {"Array":model_array}
 df_name = {"Array":frame_array}
 
 now = datetime.now()
@@ -125,9 +124,9 @@ def login():
                 session["loggedin"] = True
                 session["id"] = account["id"]
                 session["username"] = account["username"]
-                msg = "Valid Login"
+                msg = {"message":"Valid Login", "userId":account["id"]}
             else:
-                msg = "Invalid Login"
+                msg = {"message":"Invalid Login"}
     return msg
 
 @app.route('/register', methods =['GET', 'POST'])
@@ -190,6 +189,70 @@ def get_next_problem():
 def get_data_structure():
     ds = ["Array", "Tree", "String", "Hash Table", "DFS"]
     return ds
+
+@app.route('/increment_score', methods=['GET', 'POST'])
+def increment_user_score():
+    request_data = request.get_json()
+    uid = request_data["userId"]
+    qtitle = request_data["Title"]
+    ds = request_data["dataStructure"]
+    temp_df = df_name[ds]
+    flag = 0
+    q_difficulty = temp_df[temp_df["Title"]==qtitle]["Difficulty"].iloc[0]
+    q_id = temp_df[temp_df["Title"]==qtitle]["Id"].iloc[0]
+    cursor.execute('INSERT INTO questions_solved VALUES (% s, % s)', (uid, q_id))
+    cursor.execute("SELECT * FROM user_score WHERE userId = % s AND ds = % s",(uid, ds))
+    userScore = cursor.fetchone()
+    if(userScore):
+        user_score = userScore["score"]
+    else:
+        user_score = 0
+        flag = 1
+    if(q_difficulty=='Easy'):
+        user_score += 10
+    elif(q_difficulty=='Medium'):
+        user_score += 20
+    else:
+        user_score += 30
+    if(flag==1):
+        cursor.execute('INSERT INTO user_score VALUES (% s, % s, % s)', (uid, ds, user_score))
+        connection.commit()
+    else:
+        cursor.execute("UPDATE user_score set score= % s  where userId= % s and ds=% s",(user_score, uid, ds))
+        connection.commit()
+    return "Increment Success"
+
+@app.route('/decrement_score', methods=['GET', 'POST'])
+def decrement_user_score():
+    request_data = request.get_json()
+    uid = request_data["userId"]
+    qtitle = request_data["Title"]
+    ds = request_data["dataStructure"]
+    temp_df = df_name[ds]
+    flag = 0
+    q_difficulty = temp_df[temp_df["Title"]==qtitle]["Difficulty"].iloc[0]
+    cursor.execute("SELECT * FROM user_score WHERE userId = % s AND ds = % s",(uid, ds))
+    userScore = cursor.fetchone()
+    if(userScore):
+        user_score = userScore["score"]
+    else:
+        user_score = 0
+        flag = 1
+    if(q_difficulty=='Easy'):
+        user_score -= 5
+    elif(q_difficulty=='Medium'):
+        user_score -= 15
+    else:
+        user_score -= 25
+    if(user_score<0):
+        user_score = 0
+    if(flag==1):
+        cursor.execute('INSERT INTO user_score VALUES (% s, % s, % s)', (uid, ds, user_score))
+        connection.commit()
+    else:
+        cursor.execute("UPDATE user_score set score= % s  where userId= % s and ds=% s",(user_score, uid, ds))
+        connection.commit()
+    return "Decrement Success"
 
 if __name__ == '__main__':
     app.run(debug=True)
