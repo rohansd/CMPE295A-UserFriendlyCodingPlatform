@@ -161,6 +161,17 @@ def register():
     print("no response")
     return msg
 
+@app.route('/getProblemByDataStructure', methods=['GET', 'POST'])
+def getProblemByDataStructure():
+    result = []
+    request_data = request.get_json()
+    if request.method == 'POST' or request.method == 'GET':
+        if 'requestedDataStructure' in request_data:
+            requestedDataStructure = \
+                request_data['requestedDataStructure']
+            result = frame[frame['Tags'] == requestedDataStructure]
+
+    return jsonify(result)
 
 @app.route('/get_next_problem', methods=['GET', 'POST'])
 def get_next_problem():
