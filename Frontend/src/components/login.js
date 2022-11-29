@@ -42,7 +42,7 @@ export default function SignInSide() {
       .then((response) => {
         console.log("Status Code : ", response.status);
         console.log("returned message :", response.data);
-        if (response.status === 200 && response.data === "Valid Login") {
+        if (response.status === 200) {
           console.log("logged in username :", data1.username);
           history.push("/problems");
         }

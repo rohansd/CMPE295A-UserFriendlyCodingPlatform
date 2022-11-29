@@ -13,11 +13,12 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
 
 export default function CodeScreen() {
-  
+  let history = useHistory();
   const [loading, setLoading] = useState(true);
   const [question, setQuestion] = useState([])
 
@@ -40,6 +41,10 @@ export default function CodeScreen() {
 
     fetchData();
   }, []);
+
+  const viewFeedback = (event) => {
+    history.push("/try");
+  };
     
     return (
         <ThemeProvider theme={theme}>
@@ -100,8 +105,19 @@ export default function CodeScreen() {
                 <Box component="span" sx={{ display: 'block' }}>Frequency : {question.Frequency}</Box>
                 </div>
                 </Box>
-            </Grid>
-            <Grid>        
+          </Grid>
+          
+          <Grid>       
+            <Box>
+              <Grid container spacing={2}> 
+                <Grid item xs="10">
+
+                </Grid>
+              <Grid item justifyContent="flex-end">
+                <Button onClick={(event) => viewFeedback(event)}>View Feedback</Button>
+                </Grid>
+              </Grid>
+            </Box>
                 <Box
               component="iframe"
               src='https://trinket.io/embed/python/3d8d7ce66b?toggleCode=true&showInstructions=true'
@@ -149,7 +165,14 @@ export default function CodeScreen() {
                       }}
                     />
                 </div> */}
-                </Box>
+            </Box>
+            <Box>
+            <Grid container spacing={2}>
+              <Grid item xs={20}>
+                <Button>Submit code</Button>
+              </Grid>
+            </Grid>
+            </Box>
             </Grid>
             </Grid>
         </ThemeProvider>
