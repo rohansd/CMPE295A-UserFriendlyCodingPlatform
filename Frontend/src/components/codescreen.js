@@ -17,28 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme();
 
 export default function CodeScreen() {
-    // const [value, setValue] = React.useState('Controlled');
-
-    // const handleChange = (event) => {
-    //     setValue(event.target.value);
-    // };
-
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();
-    //     const data = new FormData(event.currentTarget);
-    //     var user = data.get('user');
-    //     var admin = data.get('admin');
-    //     var persona;
-    //     if (user === 'on') persona = "user";
-    //     if (admin === 'on') persona = "admin";
-    //     // eslint-disable-next-line no-console
-    //     console.log("logging in credentials :");
-    //     console.log({
-    //       email: data.get('email'),
-    //       password: data.get('password'),
-    //       persona: persona
-    //     });
-      
+  
   const [loading, setLoading] = useState(true);
   const [question, setQuestion] = useState([])
 
@@ -125,9 +104,6 @@ export default function CodeScreen() {
             <Grid>        
                 <Box
               component="iframe"
-              // sx={{
-              //     '& .MuiTextField-root': { m: 1, width: '95ch' },
-              // }}
               src='https://trinket.io/embed/python/3d8d7ce66b?toggleCode=true&showInstructions=true'
               sx={{
                 width: 850,
@@ -135,6 +111,7 @@ export default function CodeScreen() {
               }}
               allowfullscreen
             >
+              
               {/* <iframe src="https://trinket.io/embed/python/3d8d7ce66b" width="100%" height="356" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe> */}
                 {/* <div>
                     <TextField

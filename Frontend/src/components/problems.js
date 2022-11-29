@@ -19,14 +19,55 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import Grid from '@mui/material/Grid';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap';
-// import { visuallyHidden } from '@mui/utils';
+import { BorderClear } from '@mui/icons-material';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
+function SelectSmall() {
+  // const [ds, setDS] = React.useState('');
+
+  // const changeDataStructure = async (event) => {
+  //   setDS(event.target.ds);
+  //   try {
+  //     const response = await axios.get('http://localhost:5000/get_problems_by_ds', ds);
+  //     console.log("********** questions :", response);
+  //     setQuestions(response.data) 
+  //   } catch (error) {
+  //     console.error("***********",error.message);
+  //   }
+  // };
+
+  // return (
+  //   <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+  //     <InputLabel id="demo-select-small">Select Data Structure</InputLabel>
+  //     <Select
+  //       labelId="demo-select-small"
+  //       id="demo-select-small"
+  //       value={ds}
+  //       label="Data Structures"
+  //       onChange={changeDataStructure}
+  //     >
+  //       <MenuItem value="">
+  //         <em>All</em>
+  //       </MenuItem>
+  //       <MenuItem value={10}>Array</MenuItem>
+  //       <MenuItem value={20}>Tree</MenuItem>
+  //       <MenuItem value={30}>String</MenuItem>
+  //       <MenuItem value={40}>HashTable</MenuItem>
+  //       <MenuItem value={50}>DFS</MenuItem>
+  //     </Select>
+  //   </FormControl>
+  // );
+}
 function createData(id, title, acceptance, difficulty, frequency) {
   return {
         id,
@@ -37,21 +78,21 @@ function createData(id, title, acceptance, difficulty, frequency) {
   };
 }
 
-const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-];
+// const rows = [
+//   createData('Cupcake', 305, 3.7, 67, 4.3),
+//   createData('Donut', 452, 25.0, 51, 4.9),
+//   createData('Eclair', 262, 16.0, 24, 6.0),
+//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+//   createData('Gingerbread', 356, 16.0, 49, 3.9),
+//   createData('Honeycomb', 408, 3.2, 87, 6.5),
+//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+//   createData('Jelly Bean', 375, 0.0, 94, 0.0),
+//   createData('KitKat', 518, 26.0, 65, 7.0),
+//   createData('Lollipop', 392, 0.2, 98, 0.0),
+//   createData('Marshmallow', 318, 0, 81, 2.0),
+//   createData('Nougat', 360, 19.0, 9, 37.0),
+//   createData('Oreo', 437, 18.0, 63, 4.0),
+// ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -126,17 +167,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -237,30 +267,32 @@ export default function Problems() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [ds, setDS] = React.useState('All');
+
   // ****************
   const [loading, setLoading] = useState(true);
-  const [questions, setQuestions] = useState([])
-
+  const [questions, setQuestions] = useState([]);
   useEffect(() => {
     const fetchData = async () =>{
       setLoading(true);
       try {
         const response = await axios.get('http://localhost:5000/get_problems');
         console.log("********** questions :", response);
-        setQuestions(response.data) 
-        // const rows = questions.map((question, i) => {
-        //       createData(question.Id, question.Title, question.Acceptance, question.Difficulty, question.Frequency)
-        // })
-      
+        setQuestions(response.data)
       } catch (error) {
         console.error("***********",error.message);
       }
       setLoading(false);
     }
-
     fetchData();
   }, []);
   // ****************
+
+  const changeDataStructure = async (event) => {
+    event.preventDefault();
+    setDS(event.target.value);
+    console.log("Ds value is :", event.target.value, ds);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -268,34 +300,6 @@ export default function Problems() {
     setOrderBy(property);
   };
 
-  // const handleSelectAllClick = (event) => {
-  //   if (event.target.checked) {
-  //     const newSelected = rows.map((n) => n.title);
-  //     setSelected(newSelected);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // };
-
-  // const handleClick = (event, title) => {
-  //   const selectedIndex = selected.indexOf(title);
-  //   let newSelected = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, title);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1),
-  //     );
-  //   }
-
-  //   setSelected(newSelected);
-  // };
   const clickToRedirect = (event, title) => {
     localStorage.setItem("questionTitle", title);
       history.push("/problems");
@@ -318,13 +322,38 @@ export default function Problems() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - questions.length) : 0;
 
   return (
     
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+      <Grid container spacing={2}>
+        <Grid item xs={8}>
+          {/* <Typography variant="h2">PROBLEM LIST</Typography> */}
+        </Grid>
+        <Grid item xs={4}>
+            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+            <InputLabel id="demo-select-small">Select Data Structure</InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={ds}
+              label="Data Structures"
+              onChange={changeDataStructure}
+            >
+              <MenuItem value="All">
+                <em>All</em>
+              </MenuItem>
+              <MenuItem value={"Array"}>Array</MenuItem>
+              <MenuItem value={"Tree"}>Tree</MenuItem>
+              <MenuItem value={"String"}>String</MenuItem>
+              <MenuItem value={"HashTable"}>HashTable</MenuItem>
+              <MenuItem value={"DFS"}>DFS</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -351,34 +380,17 @@ export default function Problems() {
                   return (
                     <TableRow
                       hover
-                    //   onClick={(event) => handleClick(event, row.title)}
-                      // onClick={(event) => clickToRedirect(event, row.Id)}
                       role="button"
-                      // aria-checked={isItemSelected}
-                      // tabIndex={-1}
                       key={row.Id}
-                      // selected={isItemSelected}
                     >
-                      {/* <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell> */}
-                      {/* <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.Id}
-                      </TableCell> */}
                       <TableCell align="center">{row.Id}</TableCell>
                       <TableCell align="center">
-                        <Button variant="secondary" href="/codescreen"
+                        <Button
+                        style={{
+                            backgroundColor: "#fff",
+                            width: "500px"
+                        }}
+                        variant="contained" href="/codescreen"
                           onClick={(event) => clickToRedirect(event, row.Title)}>{row.Title}
                         </Button>
                       </TableCell>
