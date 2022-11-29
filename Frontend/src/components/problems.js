@@ -267,17 +267,16 @@ export default function Problems() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [ds, setDS] = React.useState(' ');
+  const [ds, setDS] = React.useState('All');
 
   // ****************
   const [loading, setLoading] = useState(true);
-  const [questions, setQuestions] = useState([])
-
+  const [questions, setQuestions] = useState([]);
   useEffect(() => {
     const fetchData = async () =>{
       setLoading(true);
       try {
-          const response = await axios.get('http://localhost:5000/get_problems');
+        const response = await axios.get('http://localhost:5000/get_problems');
         console.log("********** questions :", response);
         setQuestions(response.data)
       } catch (error) {
@@ -285,20 +284,14 @@ export default function Problems() {
       }
       setLoading(false);
     }
-
     fetchData();
   }, []);
   // ****************
 
   const changeDataStructure = async (event) => {
-    setDS(event.target.ds);
-    try {
-      const response = await axios.get('http://localhost:5000/get_problems_by_ds', ds);
-      console.log("********** questions :", response);
-      setQuestions(response.data) 
-    } catch (error) {
-      console.error("***********",error.message);
-    }
+    event.preventDefault();
+    setDS(event.target.value);
+    console.log("Ds value is :", event.target.value, ds);
   };
 
   const handleRequestSort = (event, property) => {
@@ -349,14 +342,14 @@ export default function Problems() {
               label="Data Structures"
               onChange={changeDataStructure}
             >
-              <MenuItem value="">
+              <MenuItem value="All">
                 <em>All</em>
               </MenuItem>
-              <MenuItem value={10}>Array</MenuItem>
-              <MenuItem value={20}>Tree</MenuItem>
-              <MenuItem value={30}>String</MenuItem>
-              <MenuItem value={40}>HashTable</MenuItem>
-              <MenuItem value={50}>DFS</MenuItem>
+              <MenuItem value={"Array"}>Array</MenuItem>
+              <MenuItem value={"Tree"}>Tree</MenuItem>
+              <MenuItem value={"String"}>String</MenuItem>
+              <MenuItem value={"HashTable"}>HashTable</MenuItem>
+              <MenuItem value={"DFS"}>DFS</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -387,31 +380,9 @@ export default function Problems() {
                   return (
                     <TableRow
                       hover
-                    //   onClick={(event) => handleClick(event, row.title)}
-                      // onClick={(event) => clickToRedirect(event, row.Id)}
                       role="button"
-                      // aria-checked={isItemSelected}
-                      // tabIndex={-1}
                       key={row.Id}
-                      // selected={isItemSelected}
                     >
-                      {/* <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell> */}
-                      {/* <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.Id}
-                      </TableCell> */}
                       <TableCell align="center">{row.Id}</TableCell>
                       <TableCell align="center">
                         <Button

@@ -87,7 +87,8 @@ export default function SignInSide() {
 
             {errorMessage && (
   <p className="error"> {errorMessage} </p>
-)}
+            )}
+            
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>

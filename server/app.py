@@ -169,11 +169,18 @@ def getProblemByDataStructure():
     result = []
     request_data = request.get_json()
     if request.method == 'POST' or request.method == 'GET':
-        if 'requestedDataStructure' in request_data:
-            requestedDataStructure = \
-                request_data['requestedDataStructure']
-            result = frame[frame['Tags'] == requestedDataStructure]
-
+        # if 'requestedDataStructure' in request_data:
+        # requestedDataStructure = \
+        #     request_data['ds']
+        if request_data['ds'] != 'All' :
+            result = frame[frame['Tags'] == request_data['ds']]
+            return result.to_json(orient="records")
+        else :
+            sql = 'Select * from Problems'
+            # connection.ping()        
+            cursor.execute(sql)
+            # cursor.execute(sql)
+            result = cursor.fetchall()
     return jsonify(result)
 
 @app.route('/get_next_problem', methods=['GET', 'POST'])
