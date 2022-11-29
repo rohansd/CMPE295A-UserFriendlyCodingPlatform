@@ -43,10 +43,73 @@ model_array = KMeans(n_clusters=3, init='k-means++', max_iter=200, n_init=10)
 model_array.fit(X)
 labels=model_array.labels_
 frame_array["cluster"] = labels 
-#print(frame_array)
 
-df_name = {"Array":frame_array}
+# Model Training for Tree
+frame_tree = frame.loc[frame['Tree']==1].reset_index(drop=True)
+column_trans = ColumnTransformer(
+                [('categories', OneHotEncoder(dtype='int'),
+                                 ['Difficulty']),
+                ('tfidf', TfidfVectorizer(), 'problem')],
+                remainder='drop', verbose_feature_names_out=False)
+frame_tre = frame_tree[["Id","Title","Difficulty","problem", "Frequency"]]
+column_trans.fit(frame_tre)
+column_trans.get_feature_names_out()
+X_tree = column_trans.transform(frame_tre).toarray()
+model_tree = KMeans(n_clusters=3, init='k-means++', max_iter=200, n_init=10)
+model_tree.fit(X_tree)
+labels_tree=model_tree.labels_
+frame_tree["cluster"] = labels_tree 
 
+# Model Training for String
+frame_string = frame.loc[frame['String']==1].reset_index(drop=True)
+column_trans = ColumnTransformer(
+                [('categories', OneHotEncoder(dtype='int'),
+                                 ['Difficulty']),
+                ('tfidf', TfidfVectorizer(), 'problem')],
+                remainder='drop', verbose_feature_names_out=False)
+frame_str = frame_string[["Id","Title","Difficulty","problem", "Frequency"]]
+column_trans.fit(frame_str)
+column_trans.get_feature_names_out()
+X_string = column_trans.transform(frame_str).toarray()
+model_str = KMeans(n_clusters=3, init='k-means++', max_iter=200, n_init=10)
+model_str.fit(X_string)
+labels_string=model_str.labels_
+frame_string["cluster"] = labels_string
+
+# Model Training for Hash Table
+frame_htable = frame.loc[frame['Hash Table']==1].reset_index(drop=True)
+column_trans = ColumnTransformer(
+                [('categories', OneHotEncoder(dtype='int'),
+                                 ['Difficulty']),
+                ('tfidf', TfidfVectorizer(), 'problem')],
+                remainder='drop', verbose_feature_names_out=False)
+frame_hash = frame_htable[["Id","Title","Difficulty","problem", "Frequency"]]
+column_trans.fit(frame_hash)
+column_trans.get_feature_names_out()
+X_htable = column_trans.transform(frame_hash).toarray()
+model_htable = KMeans(n_clusters=3, init='k-means++', max_iter=200, n_init=10)
+model_htable.fit(X_htable)
+labels_htable=model_htable.labels_
+frame_htable["cluster"] = labels_htable
+
+# Model Training for DFS
+frame_dfs = frame.loc[frame['Depth-first Search']==1].reset_index(drop=True)
+column_trans = ColumnTransformer(
+                [('categories', OneHotEncoder(dtype='int'),
+                                 ['Difficulty']),
+                ('tfidf', TfidfVectorizer(), 'problem')],
+                remainder='drop', verbose_feature_names_out=False)
+frame_depth = frame_dfs[["Id","Title","Difficulty","problem", "Frequency"]]
+column_trans.fit(frame_depth)
+column_trans.get_feature_names_out()
+X_dfs = column_trans.transform(frame_depth).toarray()
+model_dfs = KMeans(n_clusters=3, init='k-means++', max_iter=200, n_init=10)
+model_dfs.fit(X_dfs)
+labels_dfs=model_dfs.labels_
+frame_dfs["cluster"] = labels_dfs
+
+# Model Trained
+df_name = {"Array":frame_array, "Tree": frame_tree, "String":frame_string, "Hash Table": frame_htable, "DFS": frame_dfs}
 now = datetime.now()
 
 connection = \
