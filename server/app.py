@@ -142,11 +142,14 @@ def recommend_problem(ds, uid, score):
                 flag =1 
         if(flag==0):
             return temp_df[temp_df["Id"]==qid]["Content"].iloc[0]
-
-@app.route('/')         
+         
 @app.route('/get_problems', methods=['GET', 'POST'])
 def get_problems():
     return frame_req.to_dict('records')
+
+@app.route('/getHelloWorld', methods=['GET', 'POST'])
+def getHelloWorld():
+    return "Hello World"
 
 
 @app.route('/get_problem_by_title', methods=['GET', 'POST'])
@@ -161,7 +164,7 @@ def get_problem_by_title():
         return result
     return None
 
-
+@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ""

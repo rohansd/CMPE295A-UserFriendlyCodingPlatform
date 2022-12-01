@@ -18,15 +18,10 @@ class NavBar extends React.Component {
                     </Col>
                     <Col style={{"marginLeft":'480px'}}>
                     <Typography>
-                    <Logout/>
+                    {/* <Logout/> */}
                     </Typography>
                     </Col>
-                    
                 </Row>
-                
-                {/* <Logout/> */}
-                
-            
             </Navbar.Brand>
             </Container>
             </Navbar>

@@ -32,42 +32,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function SelectSmall() {
-  // const [ds, setDS] = React.useState('');
-
-  // const changeDataStructure = async (event) => {
-  //   setDS(event.target.ds);
-  //   try {
-  //     const response = await axios.get('http://localhost:5000/get_problems_by_ds', ds);
-  //     console.log("********** questions :", response);
-  //     setQuestions(response.data) 
-  //   } catch (error) {
-  //     console.error("***********",error.message);
-  //   }
-  // };
-
-  // return (
-  //   <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-  //     <InputLabel id="demo-select-small">Select Data Structure</InputLabel>
-  //     <Select
-  //       labelId="demo-select-small"
-  //       id="demo-select-small"
-  //       value={ds}
-  //       label="Data Structures"
-  //       onChange={changeDataStructure}
-  //     >
-  //       <MenuItem value="">
-  //         <em>All</em>
-  //       </MenuItem>
-  //       <MenuItem value={10}>Array</MenuItem>
-  //       <MenuItem value={20}>Tree</MenuItem>
-  //       <MenuItem value={30}>String</MenuItem>
-  //       <MenuItem value={40}>HashTable</MenuItem>
-  //       <MenuItem value={50}>DFS</MenuItem>
-  //     </Select>
-  //   </FormControl>
-  // );
-}
 function createData(id, title, acceptance, difficulty, frequency) {
   return {
         id,
@@ -77,22 +41,6 @@ function createData(id, title, acceptance, difficulty, frequency) {
         frequency
   };
 }
-
-// const rows = [
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-//   createData('Donut', 452, 25.0, 51, 4.9),
-//   createData('Eclair', 262, 16.0, 24, 6.0),
-//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//   createData('Gingerbread', 356, 16.0, 49, 3.9),
-//   createData('Honeycomb', 408, 3.2, 87, 6.5),
-//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//   createData('Jelly Bean', 375, 0.0, 94, 0.0),
-//   createData('KitKat', 518, 26.0, 65, 7.0),
-//   createData('Lollipop', 392, 0.2, 98, 0.0),
-//   createData('Marshmallow', 318, 0, 81, 2.0),
-//   createData('Nougat', 360, 19.0, 9, 37.0),
-//   createData('Oreo', 437, 18.0, 63, 4.0),
-// ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -195,70 +143,6 @@ function EnhancedTableHead(props) {
   );
 }
 
-// EnhancedTableHead.propTypes = {
-//   numSelected: PropTypes.number.isRequired,
-//   onRequestSort: PropTypes.func.isRequired,
-//   onSelectAllClick: PropTypes.func.isRequired,
-//   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-//   orderBy: PropTypes.string.isRequired,
-//   rowCount: PropTypes.number.isRequired,
-// };
-
-// function EnhancedTableToolbar(props) {
-//   const { numSelected } = props;
-
-//   return (
-//     <Toolbar
-//       sx={{
-//         pl: { sm: 2 },
-//         pr: { xs: 1, sm: 1 },
-//         ...(numSelected > 0 && {
-//           bgcolor: (theme) =>
-//             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-//         }),
-//       }}
-//     >
-//       {numSelected > 0 ? (
-//         <Typography
-//           sx={{ flex: '1 1 100%' }}
-//           color="inherit"
-//           variant="subtitle1"
-//           component="div"
-//         >
-//           {numSelected} selected
-//         </Typography>
-//       ) : (
-//         <Typography
-//           sx={{ flex: '1 1 100%' }}
-//           variant="h6"
-//           id="tableTitle"
-//           component="div"
-//         >
-//           Coding Problems
-//         </Typography>
-//       )}
-
-//       {numSelected > 0 ? (
-//         <Tooltip title="Delete">
-//           <IconButton>
-//             <DeleteIcon />
-//           </IconButton>
-//         </Tooltip>
-//       ) : (
-//         <Tooltip title="Filter list">
-//           <IconButton>
-//             <FilterListIcon />
-//           </IconButton>
-//         </Tooltip>
-//       )}
-//     </Toolbar>
-//   );
-// }
-
-// EnhancedTableToolbar.propTypes = {
-//   numSelected: PropTypes.number.isRequired,
-// };
-
 export default function Problems() {
   let history = useHistory();
   const [order, setOrder] = React.useState('asc');
@@ -268,10 +152,9 @@ export default function Problems() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [ds, setDS] = React.useState('All');
-
-  // ****************
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
+  
   useEffect(() => {
     const fetchData = async () =>{
       setLoading(true);
@@ -286,7 +169,6 @@ export default function Problems() {
     }
     fetchData();
   }, []);
-  // ****************
 
   const changeDataStructure = async (event) => {
     event.preventDefault();

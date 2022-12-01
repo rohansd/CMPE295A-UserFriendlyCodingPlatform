@@ -14,10 +14,18 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useHistory } from "react-router-dom";
+import { Container } from "./Container";
 
 const theme = createTheme();
 
 export default function CodeScreen() {
+
+  const triggerText = "Submit";
+  const onSubmit = (event) => {
+    event.preventDefault(event);
+  };
+
+
   let history = useHistory();
   const [loading, setLoading] = useState(true);
   const [question, setQuestion] = useState([])
@@ -30,7 +38,8 @@ export default function CodeScreen() {
     const fetchData = async () =>{
       setLoading(true);
       try {
-        const response = await axios.post('http://localhost:5000/get_problem_by_title', data1);
+        console.log(data1);
+        const response = await axios.post('http://127.0.0.1:5000/get_problem_by_title', data1);
         console.log("********** question :", response.data);
         setQuestion(response.data) 
       } catch (error) {
@@ -41,10 +50,6 @@ export default function CodeScreen() {
 
     fetchData();
   }, []);
-
-  const viewFeedback = (event) => {
-    history.push("/try");
-  };
     
     return (
         <ThemeProvider theme={theme}>
@@ -107,17 +112,7 @@ export default function CodeScreen() {
                 </Box>
           </Grid>
           
-          <Grid>       
-            <Box>
-              <Grid container spacing={2}> 
-                <Grid item xs="10">
-
-                </Grid>
-              <Grid item justifyContent="flex-end">
-                <Button onClick={(event) => viewFeedback(event)}>View Feedback</Button>
-                </Grid>
-              </Grid>
-            </Box>
+          <Grid>
                 <Box
               component="iframe"
               src='https://trinket.io/embed/python/3d8d7ce66b?toggleCode=true&showInstructions=true'
@@ -127,49 +122,13 @@ export default function CodeScreen() {
               }}
               allowfullscreen
             >
-              
-              {/* <iframe src="https://trinket.io/embed/python/3d8d7ce66b" width="100%" height="356" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe> */}
-                {/* <div>
-                    <TextField
-                    id="standard-multiline-static"
-                    label="Input Code"
-                    multiline
-                    rows={18}
-                    defaultValue="Insert code"
-                    />
-                </div>
-                <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                        //  sx={{ mt: 3, mb: 2 }}
-                > 
-                Submit
-                </Button>
-                <div>
-                <TextField
-                    id="standard-multiline-static"
-                    label="Result"
-                    multiline
-                    rows={4}
-                    defaultValue="Result"
-                    inputProps={
-                        { readOnly: true, }
-                    }
-                    sx={{
-                
-                        backgroundColor: (t) =>
-                          t.palette.mode === 'light' ? t.palette.grey[200] : t.palette.grey[900],
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }}
-                    />
-                </div> */}
             </Box>
             <Box>
             <Grid container spacing={2}>
               <Grid item xs={20}>
-                <Button>Submit code</Button>
+                <div>
+                  <Container triggerText={triggerText} onSubmit={onSubmit} />
+                </div>
               </Grid>
             </Grid>
             </Box>
