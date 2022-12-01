@@ -44,7 +44,7 @@ export default function Signup() {
     };
     console.log(data1.username);
     const res = await axios
-      .post("http://localhost:5000/register", data1
+      .post("http://127.0.0.1:5000/register", data1
       //   , {
       //   headers: {
       //     'content-type': 'application/json',

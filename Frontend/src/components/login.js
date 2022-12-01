@@ -39,13 +39,12 @@ export default function SignInSide() {
     }
 
     const res = await axios
-      .post("http://localhost:5000/login", data1)
+      .post("http://127.0.0.1:5000/login", data1)
       .then((response) => {
-        console.log("Status Code : ", response.status);
-        console.log("returned message :", response.data);
-        if (response.status === 200) {
+        if (response.data["message"] === "Valid Login") {
           console.log("logged in username :", data1.username);
           history.push("/problems");
+          localStorage.setItem("userId", response.data["userId"]);
         }
         else {
           console.log("INVALID CREDENTIALS");

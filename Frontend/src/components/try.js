@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgressWithLabel from '@mui/material/CircularProgressWithLabel';
 import { Typography } from '@mui/material';
+import { Button } from 'react-bootstrap';
 
 
 const Try = () => {
@@ -28,7 +29,7 @@ useEffect(() => {
   const fetchData = async () =>{
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/get_feedback', data1);
+      const response = await axios.post('http://127.0.0.1:5000/get_feedback', data1);
       console.log("********** feedback :", response.data.Frequency);
       setFeedback(response.data)
     } catch (error) {
@@ -43,7 +44,7 @@ useEffect(() => {
     <div style={{ maxWidth: "100%" }}>
       <Typography component="h1" variant="h5"> FEEDBACK </Typography>
       <br></br><br></br>
-      <Typography> Your latest question had the following difficulty criteria : </Typography>
+      <Typography> Your latest question had the following difficulty criteria ::::: </Typography>
       <TableContainer>
         <Table aria-label="simple table">
           <TableHead>
@@ -65,6 +66,7 @@ useEffect(() => {
       </TableContainer>
       <br></br>
       <br></br>
+      <button className="btn btn-lg btn-success center modal-button">Get Next Question!</button>
       <br>
       </br>
       <Typography component="h1" variant="h5"> Calculated User Score : </Typography>

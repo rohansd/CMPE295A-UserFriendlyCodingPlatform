@@ -86,12 +86,6 @@ const headCells = [
     label: 'Title',
   },
   {
-    id: 'acceptance',
-    numeric: true,
-    disablePadding: false,
-    label: 'Acceptance',
-  },
-  {
     id: 'difficulty',
     numeric: true,
     disablePadding: false,
@@ -111,7 +105,7 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  localStorage.setItem("dataStructure", "Array");
   return (
     <TableHead>
       <TableRow>
@@ -159,7 +153,7 @@ export default function Problems() {
     const fetchData = async () =>{
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:5000/get_problems');
+        const response = await axios.get('http://127.0.0.1:5000/get_problems');
         console.log("********** questions :", response);
         setQuestions(response.data)
       } catch (error) {
@@ -225,13 +219,8 @@ export default function Problems() {
               onChange={changeDataStructure}
             >
               <MenuItem value="All">
-                <em>All</em>
+                <em>Array</em>
               </MenuItem>
-              <MenuItem value={"Array"}>Array</MenuItem>
-              <MenuItem value={"Tree"}>Tree</MenuItem>
-              <MenuItem value={"String"}>String</MenuItem>
-              <MenuItem value={"HashTable"}>HashTable</MenuItem>
-              <MenuItem value={"DFS"}>DFS</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -276,7 +265,7 @@ export default function Problems() {
                           onClick={(event) => clickToRedirect(event, row.Title)}>{row.Title}
                         </Button>
                       </TableCell>
-                      <TableCell align="center">{row.Acceptance}</TableCell>
+                      {/* <TableCell align="center">{row.Acceptance}</TableCell> */}
                       <TableCell align="center">{row.Difficulty}</TableCell>
                       <TableCell align="center">{row.Frequency}</TableCell>
                     </TableRow>

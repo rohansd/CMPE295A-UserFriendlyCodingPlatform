@@ -28,7 +28,8 @@ export default function CodeScreen() {
 
   let history = useHistory();
   const [loading, setLoading] = useState(true);
-  const [question, setQuestion] = useState([])
+  const [question, setQuestion] = useState([]);
+  const [content, setContent] = useState("");
 
   var data1 = {
     "title" : localStorage.getItem('questionTitle')
@@ -39,9 +40,12 @@ export default function CodeScreen() {
       setLoading(true);
       try {
         console.log(data1);
-        const response = await axios.post('http://127.0.0.1:5000/get_problem_by_title', data1);
-        console.log("********** question :", response.data);
-        setQuestion(response.data) 
+        const response = await axios.post('http://127.0.0.1:5000/getProblemContent', data1);
+        console.log("**********????????????????????????? question :", response.data);
+        setQuestion(response.data);
+        console.log("<><><>",response.data["Content"]);
+        setContent(response.data["Content"]);
+        console.log("questionquestionquestionquestionquestion",question)
       } catch (error) {
         console.error("***********",error.message);
       }
@@ -80,34 +84,12 @@ export default function CodeScreen() {
                     label="Question"
                     multiline
                   // rows={25}
-                    defaultValue="
-                    Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.
-
-                    You have the following three operations permitted on a word:
-
-                    Insert a character
-                    Delete a character
-                    Replace a character
-                    
-
-                    Example 1:
-
-                    Input:
-                    word1 = 'horse',
-                            word2 = 'ros'
-                    Output: 3
-                    Explanation: 
-                    horse =: rorse (replace 'h' with 'r')
-                    rorse =: rose (remove 'r')
-                    rose =: ros (remove 'e')"
+                    defaultValue={content}
                     inputProps={
                         { readOnly: true, }
                     }
                 >
                 </TextField>
-                <Box component="span" sx={{ display: 'block' }}>Acceptance rate : {question.Acceptance}</Box>
-                <Box component="span" sx={{ display: 'block' }}>Difficulty level : {question.Difficulty}</Box>
-                <Box component="span" sx={{ display: 'block' }}>Frequency : {question.Frequency}</Box>
                 </div>
                 </Box>
           </Grid>

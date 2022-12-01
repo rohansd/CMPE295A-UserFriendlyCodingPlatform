@@ -8,7 +8,7 @@ import CodeScreen from './codescreen';
 import ButtonBases from './buttonBase';
 import DemoCompiler from './demoCompiler';
 import Problems from './problems';
-import Try from './feedback';
+import Feedback from './feedback';
 //Create a Main Component
 class Main extends Component {
         state = {
@@ -40,8 +40,8 @@ class Main extends Component {
                     <Route path="/problems">
                         <Problems></Problems>
                     </Route>
-                    <Route path="/try">
-                        <Try></Try>
+                    <Route path="/feedback">
+                        <Feedback></Feedback>
                     </Route>
                 </Router>
 
