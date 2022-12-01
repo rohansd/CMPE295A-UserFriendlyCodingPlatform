@@ -145,7 +145,7 @@ def recommend_problem(ds, uid, score):
          
 @app.route('/get_problems', methods=['GET', 'POST'])
 def get_problems():
-    return frame_req.to_dict('records')
+    return frame_arr.to_dict('records')
 
 @app.route('/getHelloWorld', methods=['GET', 'POST'])
 def getHelloWorld():
@@ -215,11 +215,11 @@ def register():
             else:
                 cursor.execute('INSERT INTO users VALUES (% s, % s, % s, % s, % s)', (userId, username, password, email, now))
                 connection.commit()
-                msg = 'You have successfully registered !'
+                msg = {"message":'Register Successful', "userId": userId}
         elif request.method == 'POST':
-            msg = 'Please fill out the form !'
+            msg = {"message":'Please fill out the form !'}
         return msg
-    msg = 'NO RESPONSE'
+    msg = {"message":'NO RESPONSE'}
     print("no response")
     return msg
 
@@ -329,6 +329,25 @@ def decrement_user_score():
 
 @app.route('/get_feedback', methods=['GET', 'POST'])
 def get_user_feedback():
+    feedback_stmt = ""
+    score_difficulty = {
+        "Easy" : {
+            "positive": ["Easy", "Medium", "Hard"],
+            "negative" : []
+        },
+        "Medium" : {
+            "positive": [ "Medium", "Hard"],
+            "negative" : ["Easy"]
+        },
+        "Hard" : {
+            "positive": [ "Hard"],
+            "negative" : ["Easy", "Medium"]
+        },
+    }
+    feedback = {
+        "positive" : "You are doing well! Next question may be same or relatively harder difficulty.",
+        "negative" : "You may need more practice on the current difficulty. Next question may be of same or lesser difficulty."
+    }
     request_data = request.get_json()
     uid = request_data["userId"]
     qtitle = request_data["Title"]
@@ -343,11 +362,23 @@ def get_user_feedback():
         user_score = userScore["score"]
     else:
         user_score = 0
+    if(user_score<20):
+        next_difficulty = "Easy"
+    elif(user_score>=20 and user_score<60):
+        next_difficulty = "Medium"
+    else:
+        next_difficulty = "Hard"
+    
+    if(next_difficulty in score_difficulty[q_difficulty]["positive"]):
+        feedback_stmt = feedback["positive"]
+    elif(next_difficulty in score_difficulty[q_difficulty]["negative"]):
+        feedback_stmt = feedback["negative"]
     op = {
         "Frequency" : q_frequency,
         "Acceptance" : str(q_acceptance)+"%",
         "Difficulty" : q_difficulty,
-        "User Score": user_score
+        "User Score": user_score,
+        "Statement" : feedback_stmt
     }
     return op
 
