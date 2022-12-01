@@ -17,10 +17,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Redirect } from "react-router";
 import { useHistory } from "react-router-dom";
 import {signup} from '../services/authenticationService';
-
+import backgroundImage from '../img/hero295B.png';
 const theme = createTheme();
 
 export default function Signup() {
+  // const backgroundImage = require('../img/hero295B.jpeg');
   let history = useHistory();
   const [errorMessage, setErrorMessage] = useState('');
   const [idCreated, setidCreated] = useState(0);
@@ -55,15 +56,7 @@ export default function Signup() {
         console.log("Status Code : ", response.status);
         console.log("returned message :", response.data);
         if (response.status === 200 && response.data === "You have successfully registered !") {
-          // localStorage.setItem("c_id", response.data.CustomerID);
-          // localStorage.setItem('customerEmail', this.state.email);
-          // localStorage.setItem('username', this.state.persona);
-          // this.setState({
-          //   authFlag: true,
-          //   idCreated: (
-          //     <Redirect to="/problems"></Redirect>
-          //   ),
-          // })
+          localStorage.setItem("username", data1.username);
           console.log("signed up", data1.username);
           history.push("/problems");
         }
@@ -72,28 +65,10 @@ export default function Signup() {
           setErrorMessage('Invalid Credentials. Please Try Again');
         }
       });
-              
-    // const response = await signup(data1);
-    // console.log(response.data);
-    // console.log(response.status);
-    // if(response.status === 200){
-    //   setUser(response.data);
-    //   setAuthState(true);
-    //   updateLocalStorage(response.data); //Need to call after setUser
-    // }
-    // else{
-    //   setAuthState(false);
-    //   console.log('Error', response);
-    // }
+            
   };
 
-  // if(idCreated){
-  //   return <Redirect to="/profile" />
-  // } else  if (idCreated==="Email ID already exists"){
-  //   return (
-  //   <div> Email ID already exists </div>
-  // );
-  // }
+ 
   return (
     
     <ThemeProvider theme={theme}>
@@ -105,14 +80,24 @@ export default function Signup() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://www.thestatesman.com/wp-content/uploads/2018/05/Code.jpg)',
+            backgroundImage: `url(${backgroundImage})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
+            height: "90vh",
             backgroundPosition: 'center',
-          }}
-        />
+          }}>
+          {/* <Box
+    class="candles"
+    style={{
+      backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: "cover",
+    height: "100vh",
+    color: "#f5f5f5"
+}}></Box> */}
+          </Grid>
+        
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{

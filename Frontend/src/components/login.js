@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Redirect } from "react-router";
 import { useHistory } from "react-router-dom";
 import {signin} from '../services/authenticationService';
+import backgroundImage from '../img/hero295B.png';
 
 const theme = createTheme();
 
@@ -63,11 +64,12 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://www.thestatesman.com/wp-content/uploads/2018/05/Code.jpg)',
+            backgroundImage: `url(${backgroundImage})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
+            height: "90vh",
             backgroundPosition: 'center',
           }}
         />

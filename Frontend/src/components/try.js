@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { withStyles } from '@material-ui/core'
+import CircularProgressWithLabel from '@mui/material/CircularProgressWithLabel';
 import { Typography } from '@mui/material';
 
 
@@ -69,6 +69,7 @@ useEffect(() => {
       </br>
       <Typography component="h1" variant="h5"> Calculated User Score : </Typography>
       <Typography component="h1" variant="h5">{feedback["User Score"]}</Typography>
+      <CircularProgressWithLabel value={feedback["User Score"]} />
     </div>
   )
 }

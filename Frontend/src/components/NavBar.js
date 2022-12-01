@@ -13,10 +13,10 @@ class NavBar extends React.Component {
                 <Row>
                     <Col style={{"marginTop":'30px'}}>
                     <Typography>
-                    <span className="logoText">User Friendly Coding Platform</span>
+                    <span className="logoText">USER FRIENDLY CODING PLATFORM</span>
                     </Typography>
                     </Col>
-                    <Col style={{"marginLeft":'500px'}}>
+                    <Col style={{"marginLeft":'480px'}}>
                     <Typography>
                     <Logout/>
                     </Typography>
