@@ -141,7 +141,11 @@ def recommend_problem(ds, uid, score):
             if(r["questionId"]==qid):
                 flag =1 
         if(flag==0):
-            return temp_df[temp_df["Id"]==qid]["Content"].iloc[0]
+            content = {
+                "Content" : temp_df[temp_df["Id"]==qid]["Content"].iloc[0],
+                "Title" : temp_df[temp_df["Id"]==qid]["Title"].iloc[0]
+            }
+            return content
          
 @app.route('/get_problems', methods=['GET', 'POST'])
 def get_problems():
@@ -150,6 +154,16 @@ def get_problems():
 @app.route('/getHelloWorld', methods=['GET', 'POST'])
 def getHelloWorld():
     return "Hello World"
+
+@app.route("/getProblemContent", methods=["GET","POST"])
+def getProblemContent():
+    request_data = request.get_json()
+    result = {
+        "Content" : content[content['Title'] == request_data['title']]["Content"].iloc[0],
+        "Title" : request_data['title']
+    }
+    print(result)
+    return result
 
 
 @app.route('/get_problem_by_title', methods=['GET', 'POST'])
@@ -256,7 +270,7 @@ def get_next_problem():
         cursor.execute('INSERT INTO user_score VALUES (% s, % s, % s)', (uid, ds, 0))
         connection.commit()
     content = recommend_problem(ds,uid, user_score)
-    return {"Content":content}
+    return content
 
 @app.route('/get_data_structures', methods=['GET', 'POST'])
 def get_data_structure():
